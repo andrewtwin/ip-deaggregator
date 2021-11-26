@@ -2,37 +2,29 @@ import ipaddress
 import argparse
 
 def main():
-    parser = argparse.ArgumentParser(description="Subnet a network.")
+    parser = argparse.ArgumentParser(description="Subnet a network to remove address space.")
     parser.add_argument(
-        "network", type=str, help="Network to subnet.",
+        "-n", "--network", type=str, help="Supernet to remove subnets from.", dest="supernet", 
     )
     parser.add_argument(
-        "-m", "--max-prefix", type=int, default=25, help="Maximum prefix length.",
-    )
-    parser.add_argument(
-        "-c", "--indent-char", default=" ", help="Characters to use for indentation.",
+        "subnet", type=str, help="Subnet to remove from the Supernet.", nargs="+"
     )
 
     args = parser.parse_args()
     try:
-        parent_network = ipaddress.ip_network(args.network)
+        supernet = ipaddress.ip_network(args.supernet)
     except ValueError:
-        exit(f"Supplied argument {args.network} is not a valid IPv4 or IPv6 network.")
+        exit(f"Supplied argument {args.supernet} is not a valid IPv4 or IPv6 network.")
 
-    if args.max_prefix <= parent_network.prefixlen:
-        exit(
-            f"Network prefix {args.max_prefix} already at or beyond max prefix length {parent_network.prefixlen}."
-        )
-  
-    supernet = ipaddress.ip_network('10.0.0.0/16')
-    gap_subnets = [
-       ipaddress.ip_network('10.0.0.0/24'),
-       ipaddress.ip_network('10.0.3.0/25'),
-       ipaddress.ip_network('10.0.90.0/26')
-       ]
+    subnets = list()
+    for subnet in args.subnet:
+        try:
+            subnets.append(ipaddress.ip_network(subnet))
+        except ValueError:
+            exit(f"Supplied argument {subnet} is not a valid IPv4 or IPv6 network.")
 
-    print(f"Finding subnets of {supernet} which don't include {', '.join(str(i) for i in gap_subnets)}")
-    check_subnets(supernet, gap_subnets)
+    print(f"Finding the largest subnets of {supernet} which don't include the subnets: {', '.join(str(i) for i in subnets)}")
+    check_subnets(supernet, subnets)
 
 def check_subnets(supernet, gap_subnets):
     for subnet in supernet.subnets(1):
