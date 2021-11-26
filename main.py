@@ -4,10 +4,10 @@ import argparse
 def main():
     parser = argparse.ArgumentParser(description="Subnet a network to exclude address space.")
     parser.add_argument(
-        "-n", "--network", type=str, help="Supernet to exclude subnets from.", dest="supernet", 
+        "-n", "--network", type=str, help="Supernet to exclude subnet(s) from.", dest="supernet", required=True 
     )
     parser.add_argument(
-        "subnet", type=str, help="Subnet to exclude from the Supernet.", nargs="+"
+        "subnet", type=str, help="Subnet(s) to exclude from the Supernet.", nargs="+"
     )
 
     args = parser.parse_args()
