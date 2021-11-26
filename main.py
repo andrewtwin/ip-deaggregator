@@ -24,9 +24,9 @@ def main():
             exit(f"Supplied argument {subnet} is not a valid IPv4 or IPv6 network.")
 
     print(f"Finding the largest subnets of {supernet} which don't include the subnets: {', '.join(str(i) for i in subnets)}")
-    check_subnets(supernet, subnets)
+    exclude_subnets(supernet, subnets)
 
-def check_subnets(supernet, gap_subnets):
+def exclude_subnets(supernet, gap_subnets):
     for subnet in supernet.subnets(1):
        unsuitable_subnet = False
        max_gap_size = supernet.prefixlen
@@ -39,7 +39,7 @@ def check_subnets(supernet, gap_subnets):
        if not unsuitable_subnet:
             print(f"{subnet}")
        elif subnet.prefixlen < max_gap_size:
-           check_subnets(subnet, gap_subnets)
+           exclude_subnets(subnet, gap_subnets)
 
 if __name__ == "__main__":
     main()
