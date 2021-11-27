@@ -4,7 +4,7 @@ Useful for populating route tables, filters, etc.
 
 ## Usage
 ```
-usage: main.py [-h] -n SUPERNET [-d OUTPUT_DELIMITER] [-q] subnet [subnet ...]
+usage: main.py [-h] -n SUPERNET [-q] [-d OUTPUT_DELIMITER] [-m {prefix,net,wildcard}] subnet [subnet ...]
 
 Subnet a network to exclude address space.
 
@@ -15,10 +15,12 @@ optional arguments:
   -h, --help            show this help message and exit
   -n SUPERNET, --network SUPERNET
                         Supernet to exclude subnet(s) from.
+  -q, --quiet           Only produce output, no other information.
   -d OUTPUT_DELIMITER, --output-delimiter OUTPUT_DELIMITER
                         Sets the output delimeter, default is new line.
-  -q, --quiet           Only produce output, no other info.
-  ```
+  -m {prefix,net,wildcard}, --mask-type {prefix,net,wildcard}
+                        Use prefix length (default), net mask, or wildcard mask.
+```
 
 ## Examples
 Single subnet:
