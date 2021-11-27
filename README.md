@@ -4,7 +4,7 @@ Useful for populating route tables, filters, etc.
 
 ## Usage
 ```
-usage: main.py [-h] -n SUPERNET [-d OUTPUT_DELIMITER] [-q] subnet [subnet ...]
+usage: main.py [-h] -n SUPERNET [-q] [-d OUTPUT_DELIMITER] [-m {prefix,net,wildcard}] subnet [subnet ...]
 
 Subnet a network to exclude address space.
 
@@ -15,10 +15,14 @@ optional arguments:
   -h, --help            show this help message and exit
   -n SUPERNET, --network SUPERNET
                         Supernet to exclude subnet(s) from.
+  -q, --quiet           Only produce output, no other information.
   -d OUTPUT_DELIMITER, --output-delimiter OUTPUT_DELIMITER
                         Sets the output delimeter, default is new line.
-  -q, --quiet           Only produce output, no other info.
-  ```
+  -m {prefix,net,wildcard}, --mask-type {prefix,net,wildcard}
+                        Use prefix length (default), net mask, or wildcard mask.
+
+ip-gap-finder v1.3.0
+```
 
 ## Examples
 Single subnet:
@@ -29,6 +33,18 @@ Finding the largest subnets of 192.168.0.0/24 which don't include the subnet(s):
 192.168.0.32/27
 192.168.0.64/26
 192.168.0.128/25
+==================
+3 subnets total
+```
+
+With alternate bitmask display:
+```
+python3 main.py -n 192.168.0.0/24 192.168.0.0/27 -m wildcard
+Finding the largest subnets of 192.168.0.0/0.0.0.255 which don't include the subnet(s): 192.168.0.0/0.0.0.31
+==================
+192.168.0.32/0.0.0.31
+192.168.0.64/0.0.0.63
+192.168.0.128/0.0.0.127
 ==================
 3 subnets total
 ```
