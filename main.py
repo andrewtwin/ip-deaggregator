@@ -7,6 +7,7 @@ def main():
         description="Subnet a network to exclude address space.",
         epilog="ip-gap-finder v1.3.0",
     )
+
     parser.add_argument(
         "-n",
         "--network",
@@ -15,6 +16,7 @@ def main():
         dest="supernet",
         required=True,
     )
+
     parser.add_argument(
         "subnet", type=str, help="Subnet(s) to exclude from the Supernet.", nargs="+"
     )
