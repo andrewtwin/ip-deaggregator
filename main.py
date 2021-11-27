@@ -11,7 +11,7 @@ def main():
     )
 
     parser.add_argument(
-        "-d", "--output-delimeter", type=str, help="Sets the output delimeter, default is new line.", default="\n"
+        "-d", "--output-delimiter", type=str, help="Sets the output delimeter, default is new line.", default="\n"
     )
 
     args = parser.parse_args()
@@ -31,7 +31,7 @@ def main():
     
     new_subnets = exclude_subnets(supernet, subnets)
 
-    delimiter=args.output_delimeter 
+    delimiter=args.output_delimiter 
     print(f"{delimiter.join(str(i) for i in new_subnets)}")
 
 def exclude_subnets(supernet, gap_subnets, output=list()):
