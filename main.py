@@ -15,7 +15,7 @@ def main():
     )
 
     parser.add_argument(
-        "-q", "--quiet", help="Only produce output, no other info.", action="store_false",
+        "-q", "--quiet", help="Only produce output, no other info.", action="store_false", dest="notquiet",
     )
 
     args = parser.parse_args()
@@ -31,7 +31,7 @@ def main():
         except ValueError:
             exit(f"Supplied argument {subnet} is not a valid IPv4 or IPv6 network.")
 
-    if args.quiet:
+    if args.notquiet:
         print(f"Finding the largest subnets of {supernet} which don't include the subnets: {', '.join(str(i) for i in subnets)}")
         print("="*18)
     
@@ -40,7 +40,7 @@ def main():
     delimiter=args.output_delimiter 
     print(f"{delimiter.join(str(i) for i in new_subnets)}")
     
-    if args.quiet:
+    if args.notquiet:
         print("="*18)
         print(f"{len(new_subnets)} subnets total")
 
