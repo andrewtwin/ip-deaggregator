@@ -1,6 +1,25 @@
 # ip-gap-finder
 Subnet a network to exclude address space.
 Useful for populating route tables, filters, etc.
+
+## Usage
+```
+usage: main.py [-h] -n SUPERNET [-d OUTPUT_DELIMITER] [-q] subnet [subnet ...]
+
+Subnet a network to exclude address space.
+
+positional arguments:
+  subnet                Subnet(s) to exclude from the Supernet.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -n SUPERNET, --network SUPERNET
+                        Supernet to exclude subnet(s) from.
+  -d OUTPUT_DELIMITER, --output-delimiter OUTPUT_DELIMITER
+                        Sets the output delimeter, default is new line.
+  -q, --quiet           Only produce output, no other info.
+  ```
+
 ## Examples
 Single subnet:
 ```
