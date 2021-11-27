@@ -1,11 +1,7 @@
 # ip-gap-finder
-
 Subnet a network to exclude address space.
-
 Useful for populating route tables, filters, etc.
-
-Examples:
-
+## Examples
 Single subnet:
 ```
 python3 main.py -n 192.168.0.0/24 192.168.0.0/27
