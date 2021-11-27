@@ -8,24 +8,37 @@ Examples:
 
 Single subnet:
 ```
-main.py -n 192.168.0.0/24 192.168.0.0/27
+python3 main.py -n 192.168.0.0/24 192.168.0.0/27
 Finding the largest subnets of 192.168.0.0/24 which don't include the subnets: 192.168.0.0/27
+==================
 192.168.0.32/27
 192.168.0.64/26
 192.168.0.128/25
+==================
+3 subnets total
 ```
 
 With a different delimiter:
 ```
-main.py -n 192.168.0.0/24 192.168.0.0/27 -d', '
+python3 main.py -n 192.168.0.0/24 192.168.0.0/27 -d', '
 Finding the largest subnets of 192.168.0.0/24 which don't include the subnets: 192.168.0.0/27
+==================
+192.168.0.32/27, 192.168.0.64/26, 192.168.0.128/25
+==================
+3 subnets total
+```
+
+Just the output:
+```
+python3 main.py -n 192.168.0.0/24 192.168.0.0/27 -d', ' -q
 192.168.0.32/27, 192.168.0.64/26, 192.168.0.128/25
 ```
 
 Multiple subnets:
 ```
-main.py -n 192.168.0.0/16 192.168.1.0/24 192.168.2.0/25 192.168.20.128/27
+python3 main.py -n 192.168.0.0/16 192.168.1.0/24 192.168.2.0/25 192.168.20.128/27
 Finding the largest subnets of 192.168.0.0/16 which don't include the subnets: 192.168.1.0/24, 192.168.2.0/25, 192.168.20.128/27
+==================
 192.168.0.0/24
 192.168.2.128/25
 192.168.3.0/24
@@ -41,4 +54,6 @@ Finding the largest subnets of 192.168.0.0/16 which don't include the subnets: 1
 192.168.32.0/19
 192.168.64.0/18
 192.168.128.0/17
+==================
+15 subnets total
 ```
