@@ -19,6 +19,14 @@ def main():
     )
 
     parser.add_argument(
+        "-q",
+        "--quiet",
+        help="Only produce output, no other information.",
+        action="store_false",
+        dest="notquiet",
+    )
+
+    parser.add_argument(
         "-d",
         "--output-delimiter",
         type=str,
@@ -27,19 +35,12 @@ def main():
     )
 
     parser.add_argument(
-        "-q",
-        "--quiet",
-        help="Only produce output, no other info.",
-        action="store_false",
-        dest="notquiet",
-    )
-
-    parser.add_argument(
         "-m",
         "--mask-type",
         help="Use prefix length (default), net mask, or wildcard mask.",
         type=str,
         choices=["prefix", "net", "wildcard"],
+        default="prefix",
     )
 
     args = parser.parse_args()
@@ -57,7 +58,8 @@ def main():
 
     if args.notquiet:
         print(
-            f"Finding the largest subnets of {format_address(supernet, args.mask_type)} which don't include the subnet(s): {', '.join(format_address(i, args.mask_type) for i in subnets)}"
+            f"Finding the largest subnets of {format_address(supernet, args.mask_type)}"
+            f"which don't include the subnet(s): {', '.join(format_address(i, args.mask_type) for i in subnets)}"
         )
         print("=" * 18)
 
