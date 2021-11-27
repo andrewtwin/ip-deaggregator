@@ -97,7 +97,7 @@ def exclude_subnets(supernet, gap_subnets, output=[], max_gap_prefixlen=0):
     return output
 
 
-def format_address(address, mask):
+def format_address(address, mask="prefix"):
     if mask == "net":
         return address.with_netmask
     elif mask == "wildcard":
