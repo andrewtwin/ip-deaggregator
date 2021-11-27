@@ -44,21 +44,23 @@ def main():
         print("="*18)
         print(f"{len(new_subnets)} subnets total")
 
-def exclude_subnets(supernet, gap_subnets, output=list()):
+def exclude_subnets(supernet, gap_subnets, output=list(), max_gap_prefixlen=0):
+    if max_gap_prefixlen == 0: 
+        for gap in gap_subnets:
+            if max_gap_prefixlen < gap.prefixlen:
+                max_gap_prefixlen = gap.prefixlen
+    
     for subnet in supernet.subnets(1):
-       unsuitable_subnet = False
-       max_gap_size = supernet.prefixlen
-       for gap in gap_subnets:
-           if gap.prefixlen > max_gap_size:
-               max_gap_size = gap.prefixlen
-           if gap.subnet_of(subnet) or subnet.subnet_of(gap):
-               unsuitable_subnet = True
-               break
+        unsuitable_subnet = False
+        for gap in gap_subnets:
+            if gap.subnet_of(subnet) or subnet.subnet_of(gap):
+                unsuitable_subnet = True
+                break
         
-       if not unsuitable_subnet:
+        if not unsuitable_subnet:
             output.append(subnet)
-       elif subnet.prefixlen < max_gap_size:
-            output = exclude_subnets(subnet, gap_subnets, output)
+        elif subnet.prefixlen < max_gap_prefixlen:
+            output = exclude_subnets(subnet, gap_subnets, output, max_gap_prefixlen)
 
     return output
 
