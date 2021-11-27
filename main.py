@@ -53,6 +53,7 @@ def exclude_subnets(supernet, gap_subnets, output=list()):
                max_gap_size = gap.prefixlen
            if gap.subnet_of(subnet) or subnet.subnet_of(gap):
                unsuitable_subnet = True
+               break
         
        if not unsuitable_subnet:
             output.append(subnet)
