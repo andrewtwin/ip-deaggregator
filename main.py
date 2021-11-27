@@ -14,6 +14,10 @@ def main():
         "-d", "--output-delimiter", type=str, help="Sets the output delimeter, default is new line.", default="\n"
     )
 
+    parser.add_argument(
+        "-q", "--quiet", help="Only produce output, no other info.", action="store_true",
+    )
+
     args = parser.parse_args()
     try:
         supernet = ipaddress.ip_network(args.supernet)
@@ -27,7 +31,8 @@ def main():
         except ValueError:
             exit(f"Supplied argument {subnet} is not a valid IPv4 or IPv6 network.")
 
-    print(f"Finding the largest subnets of {supernet} which don't include the subnets: {', '.join(str(i) for i in subnets)}")
+    if not args.quiet:
+        print(f"Finding the largest subnets of {supernet} which don't include the subnets: {', '.join(str(i) for i in subnets)}")
     
     new_subnets = exclude_subnets(supernet, subnets)
 
