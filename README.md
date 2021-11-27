@@ -15,7 +15,7 @@ Finding the largest subnets of 192.168.0.0/24 which don't include the subnets: 1
 192.168.0.128/25
 ```
 
-With a different delimeter:
+With a different delimiter:
 ```
 main.py -n 192.168.0.0/24 192.168.0.0/27 -d', '
 Finding the largest subnets of 192.168.0.0/24 which don't include the subnets: 192.168.0.0/27
