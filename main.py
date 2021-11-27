@@ -32,7 +32,7 @@ def main():
             exit(f"Supplied argument {subnet} is not a valid IPv4 or IPv6 network.")
 
     if args.notquiet:
-        print(f"Finding the largest subnets of {supernet} which don't include the subnets: {', '.join(str(i) for i in subnets)}")
+        print(f"Finding the largest subnets of {supernet} which don't include the subnet(s): {', '.join(str(i) for i in subnets)}")
         print("="*18)
     
     new_subnets = exclude_subnets(supernet, subnets)
