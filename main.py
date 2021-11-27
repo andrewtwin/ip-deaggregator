@@ -58,7 +58,7 @@ def main():
 
     if args.notquiet:
         print(
-            f"Finding the largest subnets of {format_address(supernet, args.mask_type)}"
+            f"Finding the largest subnets of {format_address(supernet, args.mask_type)} "
             f"which don't include the subnet(s): {', '.join(format_address(i, args.mask_type) for i in subnets)}"
         )
         print("=" * 18)
