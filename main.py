@@ -34,6 +34,14 @@ def main():
         dest="notquiet",
     )
 
+    parser.add_argument(
+        "-m",
+        "--mask-type",
+        help="Use prefix length (default), net mask, or wildcard mask.",
+        type=str,
+        choices=["prefix", "net", "wildcard"],
+    )
+
     args = parser.parse_args()
     try:
         supernet = ipaddress.ip_network(args.supernet)
@@ -49,14 +57,14 @@ def main():
 
     if args.notquiet:
         print(
-            f"Finding the largest subnets of {supernet} which don't include the subnet(s): {', '.join(str(i) for i in subnets)}"
+            f"Finding the largest subnets of {format_address(supernet, args.mask_type)} which don't include the subnet(s): {', '.join(format_address(i, args.mask_type) for i in subnets)}"
         )
         print("=" * 18)
 
     new_subnets = exclude_subnets(supernet, subnets)
 
     delimiter = args.output_delimiter
-    print(f"{delimiter.join(str(i) for i in new_subnets)}")
+    print(f"{delimiter.join(format_address(i, args.mask_type) for i in new_subnets)}")
 
     if args.notquiet:
         print("=" * 18)
@@ -82,6 +90,15 @@ def exclude_subnets(supernet, gap_subnets, output=[], max_gap_prefixlen=0):
             exclude_subnets(subnet, gap_subnets, output, max_gap_prefixlen)
 
     return output
+
+
+def format_address(address, mask):
+    if mask == "net":
+        return address.with_netmask
+    elif mask == "wildcard":
+        return address.with_hostmask
+    else:
+        return address.with_prefixlen
 
 
 if __name__ == "__main__":
