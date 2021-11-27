@@ -24,7 +24,7 @@ def main():
     except ValueError:
         exit(f"Supplied argument {args.supernet} is not a valid IPv4 or IPv6 network.")
 
-    subnets = list()
+    subnets = []
     for subnet in args.subnet:
         try:
             subnets.append(ipaddress.ip_network(subnet))
@@ -44,7 +44,7 @@ def main():
         print("="*18)
         print(f"{len(new_subnets)} subnets total")
 
-def exclude_subnets(supernet, gap_subnets, output=list(), max_gap_prefixlen=0):
+def exclude_subnets(supernet, gap_subnets, output=[], max_gap_prefixlen=0):
     if max_gap_prefixlen == 0: 
         for gap in gap_subnets:
             if max_gap_prefixlen < gap.prefixlen:
@@ -60,7 +60,7 @@ def exclude_subnets(supernet, gap_subnets, output=list(), max_gap_prefixlen=0):
         if not unsuitable_subnet:
             output.append(subnet)
         elif subnet.prefixlen < max_gap_prefixlen:
-            output = exclude_subnets(subnet, gap_subnets, output, max_gap_prefixlen)
+            exclude_subnets(subnet, gap_subnets, output, max_gap_prefixlen)
 
     return output
 
