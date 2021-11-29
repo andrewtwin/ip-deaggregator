@@ -1,10 +1,10 @@
-# ip-gap-finder
+# IP Deaggregator
 Subnet a network to exclude address space.
 Useful for populating route tables, filters, etc.
 
 ## Usage
 ```
-usage: main.py [-h] -n SUPERNET [-q] [-d OUTPUT_DELIMITER] [-m {prefix,net,wildcard}] subnet [subnet ...]
+usage: ip-deaggregator [-h] -n SUPERNET [-q] [-d OUTPUT_DELIMITER] [-m {prefix,net,wildcard}] subnet [subnet ...]
 
 Subnet a network to exclude address space.
 
@@ -21,7 +21,7 @@ optional arguments:
   -m {prefix,net,wildcard}, --mask-type {prefix,net,wildcard}
                         Use prefix length (default), net mask, or wildcard mask.
 
-ip-gap-finder v1.3.0
+ip-deaggregator v1.4.0
 ```
 
 ## Examples
