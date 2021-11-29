@@ -1,4 +1,4 @@
-# IP Deaggregator
+# ip-deaggregator
 Subnet a network to exclude address space.
 Useful for populating route tables, filters, etc.
 
