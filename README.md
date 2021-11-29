@@ -2,6 +2,8 @@
 Subnet a network to exclude address space.
 Useful for populating route tables, filters, etc.
 
+Does the opposite of [ip-aggregator](https://github.com/andrewtwin/ip-aggregator)
+
 ## Usage
 ```
 usage: ip-deaggregator [-h] -n SUPERNET [-q] [-d OUTPUT_DELIMITER] [-m {prefix,net,wildcard}] subnet [subnet ...]
@@ -23,6 +25,9 @@ optional arguments:
 
 ip-deaggregator v1.4.0
 ```
+
+## Installation
+Download the python zipapp from the [releases](https://github.com/andrewtwin/ip-deaggregator/releases) page.
 
 ## Examples
 Single subnet:
