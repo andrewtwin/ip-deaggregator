@@ -121,6 +121,7 @@ def format_address(address, mask="prefix"):
     else:
         return address.with_prefixlen
 
+
 def get_prefixlen(ip_net):
     return ip_net.prefixlen
 
