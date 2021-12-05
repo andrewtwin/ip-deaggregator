@@ -50,7 +50,7 @@ def main():
         "-v",
         "--verbose",
         help="Be more verbose, add timing and performance info.",
-        action="store_false",
+        action="store_true",
         dest="notverbose",
     )
 
@@ -77,6 +77,7 @@ def main():
         )
         print("=" * 18)
 
+    exclude_subnets.count = 0
     new_subnets = exclude_subnets(supernet, sorted_subnets)
 
     delimiter = args.output_delimiter
@@ -86,6 +87,9 @@ def main():
         print("=" * 18)
         print(f"{len(new_subnets)} subnets total")
 
+    if args.notverbose:
+        print(f"Total subnets considered: {exclude_subnets.count}")
+
 
 def exclude_subnets(supernet, gap_subnets, output=[], max_gap_prefixlen=0):
     if max_gap_prefixlen == 0:
@@ -94,10 +98,10 @@ def exclude_subnets(supernet, gap_subnets, output=[], max_gap_prefixlen=0):
                 max_gap_prefixlen = gap.prefixlen
 
     for subnet in supernet.subnets(1):
-        print(f"Considering: {subnet}")
+        #print(f"Considering: {subnet}")
+        exclude_subnets.count += 1
         unsuitable_subnet = False
         for gap in gap_subnets:
-            print(f"Looking for a gap for {gap}")
             if gap.subnet_of(subnet) or subnet.subnet_of(gap):
                 unsuitable_subnet = True
                 break
