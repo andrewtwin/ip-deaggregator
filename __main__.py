@@ -45,7 +45,7 @@ def main():
         choices=["prefix", "net", "wildcard"],
         default="prefix",
     )
-        
+
     parser.add_argument(
         "-v",
         "--verbose",
@@ -53,7 +53,6 @@ def main():
         action="store_true",
         dest="verbose",
     )
-
 
     args = parser.parse_args()
     try:
