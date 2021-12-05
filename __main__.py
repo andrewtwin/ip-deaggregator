@@ -59,7 +59,6 @@ def main():
         except ValueError:
             exit(f"Supplied argument {subnet} is not a valid IPv4 or IPv6 network.")
 
-
     sorted_subnets = sorted(subnets, key=ipaddress.get_mixed_type_key, reverse=True)
 
     if args.notquiet:
