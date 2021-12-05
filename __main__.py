@@ -51,7 +51,7 @@ def main():
         "--verbose",
         help="Be more verbose, add timing and performance info.",
         action="store_true",
-        dest="notverbose",
+        dest="verbose",
     )
 
 
@@ -78,6 +78,7 @@ def main():
         print("=" * 18)
 
     exclude_subnets.count = 0
+    exclude_subnets.max_gap_prefixlen = 0
     new_subnets = exclude_subnets(supernet, sorted_subnets)
 
     delimiter = args.output_delimiter
@@ -87,18 +88,18 @@ def main():
         print("=" * 18)
         print(f"{len(new_subnets)} subnets total")
 
-    if args.notverbose:
+    if args.verbose:
         print(f"Total subnets considered: {exclude_subnets.count}")
+        print(f"Max subnet prefix length: {exclude_subnets.max_gap_prefixlen}")
 
 
-def exclude_subnets(supernet, gap_subnets, output=[], max_gap_prefixlen=0):
-    if max_gap_prefixlen == 0:
+def exclude_subnets(supernet, gap_subnets, output=[]):
+    if exclude_subnets.max_gap_prefixlen == 0:
         for gap in gap_subnets:
-            if max_gap_prefixlen < gap.prefixlen:
-                max_gap_prefixlen = gap.prefixlen
+            if exclude_subnets.max_gap_prefixlen < gap.prefixlen:
+                exclude_subnets.max_gap_prefixlen = gap.prefixlen
 
     for subnet in supernet.subnets(1):
-        #print(f"Considering: {subnet}")
         exclude_subnets.count += 1
         unsuitable_subnet = False
         for gap in gap_subnets:
@@ -108,9 +109,8 @@ def exclude_subnets(supernet, gap_subnets, output=[], max_gap_prefixlen=0):
 
         if not unsuitable_subnet:
             output.append(subnet)
-        elif subnet.prefixlen < max_gap_prefixlen:
-            exclude_subnets(subnet, gap_subnets, output, max_gap_prefixlen)
-
+        elif subnet.prefixlen < exclude_subnets.max_gap_prefixlen:
+            exclude_subnets(subnet, gap_subnets, output)
     return output
 
 
