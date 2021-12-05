@@ -67,7 +67,7 @@ def main():
         except ValueError:
             exit(f"Supplied argument {subnet} is not a valid IPv4 or IPv6 network.")
 
-    sorted_subnets = sorted(subnets, key=ipaddress.get_mixed_type_key, reverse=True)
+    sorted_subnets = sorted(subnets, key=get_prefixlen)
 
     if args.notquiet:
         print(
@@ -120,6 +120,9 @@ def format_address(address, mask="prefix"):
         return address.with_hostmask
     else:
         return address.with_prefixlen
+
+def get_prefixlen(ip_net):
+    return ip_net.prefixlen
 
 
 if __name__ == "__main__":
