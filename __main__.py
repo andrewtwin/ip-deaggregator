@@ -59,14 +59,17 @@ def main():
         except ValueError:
             exit(f"Supplied argument {subnet} is not a valid IPv4 or IPv6 network.")
 
+
+    sorted_subnets = sorted(subnets, key=ipaddress.get_mixed_type_key, reverse=True)
+
     if args.notquiet:
         print(
             f"Finding the largest subnets of {format_address(supernet, args.mask_type)} "
-            f"which don't include the subnet(s): {', '.join(format_address(i, args.mask_type) for i in subnets)}"
+            f"which don't include the subnet(s): {', '.join(format_address(i, args.mask_type) for i in sorted_subnets)}"
         )
         print("=" * 18)
 
-    new_subnets = exclude_subnets(supernet, subnets)
+    new_subnets = exclude_subnets(supernet, sorted_subnets)
 
     delimiter = args.output_delimiter
     print(f"{delimiter.join(format_address(i, args.mask_type) for i in new_subnets)}")
