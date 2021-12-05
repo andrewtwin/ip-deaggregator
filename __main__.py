@@ -76,7 +76,6 @@ def main():
             f"which don't include the subnet(s): {', '.join(format_address(i, args.mask_type) for i in sorted_subnets)}",
             file=sys.stderr,
         )
-        # print("=" * 18)
 
     exclude_subnets.count = 0
     exclude_subnets.max_gap_prefixlen = 0
@@ -86,7 +85,6 @@ def main():
     print(f"{delimiter.join(format_address(i, args.mask_type) for i in new_subnets)}")
 
     if args.notquiet:
-        # print("=" * 18)
         print(
             f"{len(new_subnets)} subnets total",
             file=sys.stderr,
@@ -113,7 +111,7 @@ def exclude_subnets(supernet, gap_subnets, output=[]):
         exclude_subnets.count += 1
         unsuitable_subnet = False
         for gap in gap_subnets:
-            if gap.subnet_of(subnet) or gap.prefixlen > subnet.prefixlen:
+            if gap.subnet_of(subnet) or subnet.subnet_of(gap):
                 unsuitable_subnet = True
                 break
 
