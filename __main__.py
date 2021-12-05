@@ -45,6 +45,15 @@ def main():
         choices=["prefix", "net", "wildcard"],
         default="prefix",
     )
+        
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        help="Be more verbose, add timing and performance info.",
+        action="store_false",
+        dest="notverbose",
+    )
+
 
     args = parser.parse_args()
     try:
@@ -85,8 +94,10 @@ def exclude_subnets(supernet, gap_subnets, output=[], max_gap_prefixlen=0):
                 max_gap_prefixlen = gap.prefixlen
 
     for subnet in supernet.subnets(1):
+        print(f"Considering: {subnet}")
         unsuitable_subnet = False
         for gap in gap_subnets:
+            print(f"Looking for a gap for {gap}")
             if gap.subnet_of(subnet) or subnet.subnet_of(gap):
                 unsuitable_subnet = True
                 break
