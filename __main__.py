@@ -1,9 +1,12 @@
 import ipaddress
 import argparse
 import sys
+import locale
 
 
 def main():
+    locale.setlocale(locale.LC_ALL, "")
+
     parser = argparse.ArgumentParser(
         description="Subnet a network to exclude address space.",
         epilog="ip-deaggregator v1.5.0",
@@ -92,11 +95,9 @@ def main():
 
     if args.verbose:
         print(
-            f"Total subnets considered: {exclude_subnets.count}",
-            file=sys.stderr,
-        )
-        print(
-            f"Max subnet prefix length: {exclude_subnets.max_gap_prefixlen}",
+            "Total subnets considered: " "{0:n}".format(exclude_subnets.count),
+            "\nMax subnet prefix length: "
+            "{:n}".format(exclude_subnets.max_gap_prefixlen),
             file=sys.stderr,
         )
 
