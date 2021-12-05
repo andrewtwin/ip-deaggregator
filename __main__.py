@@ -1,5 +1,6 @@
 import ipaddress
 import argparse
+import sys
 
 
 def main():
@@ -88,8 +89,14 @@ def main():
         print(f"{len(new_subnets)} subnets total")
 
     if args.verbose:
-        print(f"Total subnets considered: {exclude_subnets.count}")
-        print(f"Max subnet prefix length: {exclude_subnets.max_gap_prefixlen}")
+        print(
+            f"Total subnets considered: {exclude_subnets.count}",
+            file=sys.stderr,
+        )
+        print(
+            f"Max subnet prefix length: {exclude_subnets.max_gap_prefixlen}",
+            file=sys.stderr,
+        )
 
 
 def exclude_subnets(supernet, gap_subnets, output=[]):
