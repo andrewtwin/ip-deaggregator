@@ -5,7 +5,7 @@ import argparse
 def main():
     parser = argparse.ArgumentParser(
         description="Subnet a network to exclude address space.",
-        epilog="ip-deaggregator v1.4.0",
+        epilog="ip-deaggregator v1.5.0",
     )
 
     parser.add_argument(
