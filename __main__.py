@@ -73,9 +73,10 @@ def main():
     if args.notquiet:
         print(
             f"Finding the largest subnets of {format_address(supernet, args.mask_type)} "
-            f"which don't include the subnet(s): {', '.join(format_address(i, args.mask_type) for i in sorted_subnets)}"
+            f"which don't include the subnet(s): {', '.join(format_address(i, args.mask_type) for i in sorted_subnets)}",
+            file=sys.stderr,
         )
-        print("=" * 18)
+        # print("=" * 18)
 
     exclude_subnets.count = 0
     exclude_subnets.max_gap_prefixlen = 0
@@ -85,8 +86,11 @@ def main():
     print(f"{delimiter.join(format_address(i, args.mask_type) for i in new_subnets)}")
 
     if args.notquiet:
-        print("=" * 18)
-        print(f"{len(new_subnets)} subnets total")
+        # print("=" * 18)
+        print(
+            f"{len(new_subnets)} subnets total",
+            file=sys.stderr,
+        )
 
     if args.verbose:
         print(
