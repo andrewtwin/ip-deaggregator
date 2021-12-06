@@ -10,7 +10,7 @@ def main() -> None:
 
     parser = argparse.ArgumentParser(
         description="Subnet a network to exclude address space.",
-        epilog="ip-deaggregator v1.5.0",
+        epilog="ip-deaggregator v1.5.1",
     )
 
     parser.add_argument(
@@ -81,7 +81,7 @@ def main() -> None:
 
         if len(removed_subents) > 0:
             print(
-                "Removed redundant subnets: "
+                f"Removed {len(removed_subents)} redundant subnets from input: "
                 + newline
                 + f"{newline.join(format_address(i, args.mask_type) for i in removed_subents)}"
                 + newline,

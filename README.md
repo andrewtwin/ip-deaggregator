@@ -24,7 +24,7 @@ optional arguments:
                         Use prefix length (default), net mask, or wildcard mask.
   -v, --verbose         Be more verbose, add timing and performance info.
 
-ip-deaggregator v1.5.0
+ip-deaggregator v1.5.1
 ```
 
 ## Installation
