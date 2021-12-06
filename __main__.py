@@ -2,9 +2,10 @@ import ipaddress
 import argparse
 import sys
 import locale
-
+import time
 
 def main() -> None:
+    start_time = time.perf_counter()
     locale.setlocale(locale.LC_ALL, "")
     newline = "\n"
 
@@ -116,9 +117,12 @@ def main() -> None:
         )
 
     if args.verbose:
+        finish_time = time.perf_counter()
         print(
             "Total subnets considered: "
             + "{0:n}".format(exclude_subnets.count)
+            + newline
+            + f"In {finish_time - start_time:0.4f} seconds"
             + newline
             + "Max subnet prefix length: "
             + "{0:n}".format(exclude_subnets.max_gap_prefixlen),
