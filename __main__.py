@@ -73,10 +73,13 @@ def main():
 
     sorted_subnets = sorted(subnets, key=get_prefixlen)
 
+    newline = "\n"
     if args.notquiet:
         print(
             f"Finding the largest subnets of {format_address(supernet, args.mask_type)} "
-            f"which don't include the subnet(s): {', '.join(format_address(i, args.mask_type) for i in sorted_subnets)}",
+            + f"which don't include the subnet(s):{newline}"
+            + f"{newline.join(format_address(i, args.mask_type) for i in sorted_subnets)}{newline}"
+            + "=" * 18,
             file=sys.stderr,
         )
 
@@ -89,15 +92,17 @@ def main():
 
     if args.notquiet:
         print(
-            f"{len(new_subnets)} subnets total",
+            "=" * 18 + newline + f"{len(new_subnets)} subnets total",
             file=sys.stderr,
         )
 
     if args.verbose:
         print(
-            "Total subnets considered: " "{0:n}".format(exclude_subnets.count),
-            "\nMax subnet prefix length: "
-            "{:n}".format(exclude_subnets.max_gap_prefixlen),
+            "Total subnets considered: "
+            + "{0:n}".format(exclude_subnets.count)
+            + newline
+            + "Max subnet prefix length: "
+            + "{0:n}".format(exclude_subnets.max_gap_prefixlen),
             file=sys.stderr,
         )
 
