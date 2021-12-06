@@ -6,7 +6,7 @@ Does the opposite of [ip-aggregator](https://github.com/andrewtwin/ip-aggregator
 
 ## Usage
 ```
-usage: ip-deaggregator [-h] -n SUPERNET [-q] [-d OUTPUT_DELIMITER] [-m {prefix,net,wildcard}] subnet [subnet ...]
+usage: ip-deaggregator [-h] -n SUPERNET [-q] [-d OUTPUT_DELIMITER] [-m {prefix,net,wildcard}] [-v] subnet [subnet ...]
 
 Subnet a network to exclude address space.
 
