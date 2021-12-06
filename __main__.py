@@ -4,7 +4,7 @@ import sys
 import locale
 
 
-def main():
+def main() -> None:
     locale.setlocale(locale.LC_ALL, "")
 
     parser = argparse.ArgumentParser(
@@ -107,7 +107,12 @@ def main():
         )
 
 
-def exclude_subnets(supernet, gap_subnets, output=[]):
+def exclude_subnets(supernet, gap_subnets, output=[]) -> list:
+    """returns a list of networks from the supernet with subnets removed
+
+    Split the supernet in half and check for subnets in each half.
+    Repeat until all subnets exclude the contents of gap_subnets.
+    """
     if exclude_subnets.max_gap_prefixlen == 0:
         for gap in gap_subnets:
             if exclude_subnets.max_gap_prefixlen < gap.prefixlen:
@@ -128,7 +133,8 @@ def exclude_subnets(supernet, gap_subnets, output=[]):
     return output
 
 
-def format_address(address, mask="prefix"):
+def format_address(address, mask="prefix") -> str:
+    """return the formatted network"""
     if mask == "net":
         return address.with_netmask
     elif mask == "wildcard":
@@ -137,7 +143,11 @@ def format_address(address, mask="prefix"):
         return address.with_prefixlen
 
 
-def get_prefixlen(ip_net):
+def get_prefixlen(ip_net) -> int:
+    """return the prefix length of each network
+
+    Used for sorting by subnet length
+    """
     return ip_net.prefixlen
 
 
