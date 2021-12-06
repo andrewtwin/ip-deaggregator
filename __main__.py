@@ -4,6 +4,7 @@ import sys
 import locale
 import time
 
+
 def main() -> None:
     start_time = time.perf_counter()
     locale.setlocale(locale.LC_ALL, "")
