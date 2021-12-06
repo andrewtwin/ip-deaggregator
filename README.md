@@ -22,8 +22,9 @@ optional arguments:
                         Sets the output delimeter, default is new line.
   -m {prefix,net,wildcard}, --mask-type {prefix,net,wildcard}
                         Use prefix length (default), net mask, or wildcard mask.
+  -v, --verbose         Be more verbose, add timing and performance info.
 
-ip-deaggregator v1.4.0
+ip-deaggregator v1.5.0
 ```
 
 ## Installation

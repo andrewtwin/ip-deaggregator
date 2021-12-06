@@ -1,11 +1,16 @@
 import ipaddress
 import argparse
+import sys
+import locale
 
 
-def main():
+def main() -> None:
+    locale.setlocale(locale.LC_ALL, "")
+    newline = "\n"
+
     parser = argparse.ArgumentParser(
         description="Subnet a network to exclude address space.",
-        epilog="ip-deaggregator v1.4.0",
+        epilog="ip-deaggregator v1.5.0",
     )
 
     parser.add_argument(
@@ -46,6 +51,14 @@ def main():
         default="prefix",
     )
 
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        help="Be more verbose, add timing and performance info.",
+        action="store_true",
+        dest="verbose",
+    )
+
     args = parser.parse_args()
     try:
         supernet = ipaddress.ip_network(args.supernet)
@@ -59,30 +72,73 @@ def main():
         except ValueError:
             exit(f"Supplied argument {subnet} is not a valid IPv4 or IPv6 network.")
 
+    # Remove any redundant subnets
+    collapsed_subnets = list(ipaddress.collapse_addresses(subnets))
+
+    if args.notquiet:
+        # Get a list of redundant subnets which were removed
+        removed_subents = set(subnets) - set(collapsed_subnets)
+
+        if len(removed_subents) > 0:
+            print(
+                "Removed redundant subnets: "
+                + newline
+                + f"{newline.join(format_address(i, args.mask_type) for i in removed_subents)}"
+                + newline,
+                file=sys.stderr,
+            )
+
+    # Runs faster when the largest subnets come first
+    sorted_subnets = sorted(collapsed_subnets, key=get_prefixlen)
+
     if args.notquiet:
         print(
             f"Finding the largest subnets of {format_address(supernet, args.mask_type)} "
-            f"which don't include the subnet(s): {', '.join(format_address(i, args.mask_type) for i in subnets)}"
+            + "which don't include the subnet(s):"
+            + newline
+            + f"{newline.join(format_address(i, args.mask_type) for i in sorted_subnets)}"
+            + newline
+            + "=" * 18,
+            file=sys.stderr,
         )
-        print("=" * 18)
 
-    new_subnets = exclude_subnets(supernet, subnets)
+    exclude_subnets.count = 0
+    exclude_subnets.max_gap_prefixlen = 0
+    new_subnets = exclude_subnets(supernet, sorted_subnets)
 
     delimiter = args.output_delimiter
     print(f"{delimiter.join(format_address(i, args.mask_type) for i in new_subnets)}")
 
     if args.notquiet:
-        print("=" * 18)
-        print(f"{len(new_subnets)} subnets total")
+        print(
+            "=" * 18 + newline + f"{len(new_subnets)} subnets total",
+            file=sys.stderr,
+        )
+
+    if args.verbose:
+        print(
+            "Total subnets considered: "
+            + "{0:n}".format(exclude_subnets.count)
+            + newline
+            + "Max subnet prefix length: "
+            + "{0:n}".format(exclude_subnets.max_gap_prefixlen),
+            file=sys.stderr,
+        )
 
 
-def exclude_subnets(supernet, gap_subnets, output=[], max_gap_prefixlen=0):
-    if max_gap_prefixlen == 0:
+def exclude_subnets(supernet, gap_subnets, output=[]) -> list:
+    """returns a list of networks from the supernet with subnets removed
+
+    Split the supernet in half and check for subnets in each half.
+    Repeat until all subnets exclude the contents of gap_subnets.
+    """
+    if exclude_subnets.max_gap_prefixlen == 0:
         for gap in gap_subnets:
-            if max_gap_prefixlen < gap.prefixlen:
-                max_gap_prefixlen = gap.prefixlen
+            if exclude_subnets.max_gap_prefixlen < gap.prefixlen:
+                exclude_subnets.max_gap_prefixlen = gap.prefixlen
 
     for subnet in supernet.subnets(1):
+        exclude_subnets.count += 1
         unsuitable_subnet = False
         for gap in gap_subnets:
             if gap.subnet_of(subnet) or subnet.subnet_of(gap):
@@ -91,19 +147,27 @@ def exclude_subnets(supernet, gap_subnets, output=[], max_gap_prefixlen=0):
 
         if not unsuitable_subnet:
             output.append(subnet)
-        elif subnet.prefixlen < max_gap_prefixlen:
-            exclude_subnets(subnet, gap_subnets, output, max_gap_prefixlen)
-
+        elif subnet.prefixlen < exclude_subnets.max_gap_prefixlen:
+            exclude_subnets(subnet, gap_subnets, output)
     return output
 
 
-def format_address(address, mask="prefix"):
+def format_address(address, mask="prefix") -> str:
+    """return the formatted network"""
     if mask == "net":
         return address.with_netmask
     elif mask == "wildcard":
         return address.with_hostmask
     else:
         return address.with_prefixlen
+
+
+def get_prefixlen(ip_net) -> int:
+    """return the prefix length of each network
+
+    Used for sorting by subnet length
+    """
+    return ip_net.prefixlen
 
 
 if __name__ == "__main__":
