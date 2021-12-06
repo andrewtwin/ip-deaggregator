@@ -6,6 +6,7 @@ import locale
 
 def main() -> None:
     locale.setlocale(locale.LC_ALL, "")
+    newline = "\n"
 
     parser = argparse.ArgumentParser(
         description="Subnet a network to exclude address space.",
@@ -71,16 +72,32 @@ def main() -> None:
         except ValueError:
             exit(f"Supplied argument {subnet} is not a valid IPv4 or IPv6 network.")
 
-    # Runs faster when the largest subnets come first
-    sorted_subnets = sorted(subnets, key=get_prefixlen)
+    # Remove any redundant subnets
+    collapsed_subnets = list(ipaddress.collapse_addresses(subnets))
 
-    newline = "\n"
+    if args.notquiet:
+        # Get a list of redundant subnets which were removed
+        removed_subents = set(subnets) - set(collapsed_subnets)
+
+        if len(removed_subents) > 0:
+            print(
+                "Removed redundant subnets: "
+                + newline
+                + f"{newline.join(format_address(i, args.mask_type) for i in removed_subents)}"
+                + newline,
+                file=sys.stderr,
+            )
+
+    # Runs faster when the largest subnets come first
+    sorted_subnets = sorted(collapsed_subnets, key=get_prefixlen)
+
     if args.notquiet:
         print(
             f"Finding the largest subnets of {format_address(supernet, args.mask_type)} "
-            + f"which don't include the subnet(s):{newline}"
+            + "which don't include the subnet(s):"
+            + newline
             + f"{newline.join(format_address(i, args.mask_type) for i in sorted_subnets)}"
-            + {newline}
+            + newline
             + "=" * 18,
             file=sys.stderr,
         )
