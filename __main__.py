@@ -146,7 +146,7 @@ def exclude_subnets(supernet, gap_subnets, output=[]) -> list:
         exclude_subnets.count += 1
         unsuitable_subnet = False
         for gap in gap_subnets:
-            if gap.subnet_of(subnet) or subnet.subnet_of(gap):
+            if gap.overlaps(subnet):
                 unsuitable_subnet = True
                 break
 
