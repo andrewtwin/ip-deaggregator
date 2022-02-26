@@ -1,8 +1,62 @@
+SYNOPSYS = """Subnet a network to exclude address space. Useful for populating route tables, filters, etc."""
+
+LICENCE = """
+Copyright (C) 2021 Andrew Twin
+
+https://github.com/andrewtwin/ip-deaggregator
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+"""
+
+VERSION = "v1.6.0"
+
 import ipaddress
 import argparse
 import sys
 import locale
 
+"""Formatting Constants"""
+NEWLINE = "\n"
+RULE = "-" * 18
+
+"""IP Network Constants"""
+IP4_CLASS_A = [ipaddress.ip_network("10.0.0.0/8")]
+IP4_CLASS_B = [ipaddress.ip_network("172.16.0.0/12")]
+IP4_CLASS_C = [ipaddress.ip_network("192.168.0.0/16")]
+IP4_CLASS_D = [ipaddress.ip_network("224.0.0.0/4")]
+IP4_CLASS_E = [ipaddress.ip_network("240.0.0.0/4")]
+IP4_CGNAT = [ipaddress.ip_network("100.64.0.0/10")]
+IP4_LOCAL = [ipaddress.ip_network("127.0.0.0/8")]
+IP4_LINK_LOCAL = [ipaddress.ip_network("169.254.0.0/16")]
+
+IP4_RFC1918_ADDRESSES = IP4_CLASS_A + IP4_CLASS_B + IP4_CLASS_C
+IP4_NON_ROUTABLE = IP4_LOCAL + IP4_LINK_LOCAL
+IP4_NON_GLOBAL = IP4_RFC1918_ADDRESSES + IP4_NON_ROUTABLE
+
+IP4_ALIASES = {
+    "A": IP4_CLASS_A,
+    "B": IP4_CLASS_B,
+    "C": IP4_CLASS_C,
+    "D": IP4_CLASS_D,
+    "E": IP4_CLASS_E,
+    "CGNAT": IP4_CGNAT,
+    "LOCAL": IP4_LOCAL,
+    "LINK": IP4_LINK_LOCAL,
+    "PRIVATE": IP4_RFC1918_ADDRESSES,
+    "NOROUTE": IP4_NON_ROUTABLE,
+    "NOGLOBAL": IP4_NON_GLOBAL,
+}
 
 def main() -> None:
     locale.setlocale(locale.LC_ALL, "")
