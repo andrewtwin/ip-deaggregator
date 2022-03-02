@@ -1,7 +1,7 @@
 SYNOPSYS = """Subnet a network to exclude address space. Useful for populating route tables, filters, etc."""
 
 LICENCE = """
-Copyright (C) 2021 Andrew Twin
+Copyright (C) 2022 Andrew Twin
 
 https://github.com/andrewtwin/ip-deaggregator
 
@@ -57,6 +57,7 @@ IP4_ALIASES = {
     "NOROUTE": IP4_NON_ROUTABLE,
     "NOGLOBAL": IP4_NON_GLOBAL,
 }
+
 
 def main() -> None:
     locale.setlocale(locale.LC_ALL, "")
@@ -119,6 +120,28 @@ def main() -> None:
     except ValueError:
         exit(f"Supplied argument {args.supernet} is not a valid IPv4 or IPv6 network.")
 
+    """If displaying version and licence, print and exit"""
+    if args.version:
+        print(f"{VERSION}" + LICENCE)
+        exit(0)
+
+    """If just listing the classes, print and exit"""
+    if args.list_aliases:
+        delimiter = ", "
+        print(
+            "Recognised address aliases."
+            + NEWLINE
+            + "These can be used alongside regular addresses:"
+            + NEWLINE
+            + RULE * 2,
+        )
+        for ipclass, ipvalue in IP4_ALIASES.items():
+            print(
+                f"{ipclass.rjust(8)}: "
+                f"{delimiter.join(format_address(i, args.mask_type) for i in ipvalue)}"
+            )
+        exit(0)
+
     subnets = []
     for subnet in args.subnet:
         try:
@@ -152,7 +175,7 @@ def main() -> None:
             + newline
             + f"{newline.join(format_address(i, args.mask_type) for i in sorted_subnets)}"
             + newline
-            + "=" * 18,
+            + RULE,
             file=sys.stderr,
         )
 
@@ -165,7 +188,7 @@ def main() -> None:
 
     if args.notquiet:
         print(
-            "=" * 18 + newline + f"{len(new_subnets)} subnets total",
+            RULE + NEWLINE + f"{len(new_subnets)} subnets total",
             file=sys.stderr,
         )
 
